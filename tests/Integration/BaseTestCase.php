@@ -38,4 +38,10 @@ class BaseTestCase extends WebTestCase
             exit(1);
         }
     }
+
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+        self::$entityManager->close();
+    }
 }

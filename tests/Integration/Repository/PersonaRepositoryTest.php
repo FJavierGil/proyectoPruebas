@@ -34,8 +34,12 @@ class PersonaRepositoryTest extends BaseTestCase
         );
     }
 
+    /**
+     * Comprueba que existe la persona previamente añadida
+     */
     public function testFindOneByApellidos_Ok()
     {
+        // OJO: y si hay apellidos repetidos???
         $persona = self::$personaRepository
             ->findOneByApellidos(self::PERSONA1['apellidos']);
 
@@ -43,6 +47,22 @@ class PersonaRepositoryTest extends BaseTestCase
         self::assertSame(
             self::PERSONA1['apellidos'],
             $persona->getApellidos()
+        );
+    }
+
+    /**
+     * Comprueba que se devuelve null cuando no existe el apellido
+     */
+    public function testFindOneByApellidos_Not_Found(): void
+    {
+        $apellidosMod = 'X-X' . self::PERSONA1['apellidos'];
+        $persona = self::$personaRepository
+            ->findOneByApellidos($apellidosMod);
+
+        self::assertNull($persona);
+        self::assertNotEquals(
+            $apellidosMod,
+            $persona?->getApellidos()
         );
     }
 }
