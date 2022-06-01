@@ -25,10 +25,11 @@ class PersonaController extends AbstractController
     {
         $persona = $this->personaRepo->findOneByApellidos($apellido);
 
-        return new Response(json_encode(
-            ($persona)
-                ? [ 'persona' => $persona ]
-                : [ 'message' => 'Not Found']
-        ));
+        return ($persona)
+            ? new Response(json_encode([ 'persona' => $persona ]))
+            : new Response(
+                json_encode([ 'message' => 'Not Found']),
+                404
+            );
     }
 }

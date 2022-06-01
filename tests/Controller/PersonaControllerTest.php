@@ -13,7 +13,7 @@ class PersonaControllerTest extends WebTestCase
     private const APELLIDOS_TEST = 'test test';
     private const EMAIL_TEST = 'test@example.com';
 
-    public function testGetApellido200Ok_repository_stub(): void
+    public function testGetApellido_200_Ok_repository_stub(): void
     {
         // Preparar y configurar el stub (repositorio Personas)
         // El stub del repositorio siempre devuelve lo mismo
@@ -43,6 +43,28 @@ class PersonaControllerTest extends WebTestCase
         self::assertSame(
             self::EMAIL_TEST,
             $resultado['persona']['email']
+        );
+    }
+
+    public function testGetApellido_404_NotFound_repository_stub(): void
+    {
+        // Preparar y configurar el stub (repositorio Personas)
+        $personaRepository = $this->createStub(PersonaRepository::class);
+        $personaRepository->method('findOneByApellidos')
+            ->willReturn(null);
+        $sut = new PersonaController($personaRepository);
+
+        // Ejecutar
+        $response = $sut->getApellido('test test');
+
+        // Verificar
+        $this->assertTrue($response->isNotFound());
+        $this->assertJson($response->getContent());
+        $resultado = json_decode($response->getContent(), true);
+        self::assertArrayHasKey('message', $resultado);
+        self::assertSame(
+            'Not Found',
+            $resultado['message']
         );
     }
 }
