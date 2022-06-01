@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Repository\PersonaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PersonaController extends AbstractController
@@ -17,16 +17,18 @@ class PersonaController extends AbstractController
     }
 
     #[Route(
-        '/hello/{apellido}',
+        path: '/hello/{apellido}',
         name: 'app_persona_get',
         methods: [ 'GET' ]
     )]
-    public function index(string $apellido): JsonResponse
+    public function getApellido(string $apellido): Response
     {
-        $persona = $this->personaRepo->findByApellido($apellido);
+        $persona = $this->personaRepo->findOneByApellidos($apellido);
 
-        return ($persona)
-            ? $this->json([ 'persona' => $persona ])
-            : $this->json([ 'message' => 'Not Found'], 404);
+        return new Response(json_encode(
+            ($persona)
+                ? [ 'persona' => $persona ]
+                : [ 'message' => 'Not Found']
+        ));
     }
 }

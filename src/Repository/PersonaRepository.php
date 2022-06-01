@@ -40,17 +40,16 @@ class PersonaRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Persona[] Returns an array of Persona objects
+     * @return Persona|null Returns a Persona object or null
      */
-    public function findByApellido($value): array
+    public function findOneByApellidos($value): Persona|null
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.apellidos LIKE :val')
             ->setParameter('val', $value)
-            ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getOneOrNullResult()
+            ;
     }
 
 //    public function findOneBySomeField($value): ?Persona

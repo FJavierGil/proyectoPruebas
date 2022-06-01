@@ -13,7 +13,7 @@ class Persona implements JsonSerializable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private readonly int $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'string', length: 128)]
     private string $nombre;
