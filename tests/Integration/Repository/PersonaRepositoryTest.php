@@ -119,4 +119,27 @@ class PersonaRepositoryTest extends BaseTestCase
 
         return $persona->getApellidos();
     }
+
+    /**
+     * @depends testAdd
+     * @param string $apellidosPersona_A_Eliminar Apellidos recibidos desde testAdd()
+     */
+    public function testRemove(string $apellidosPersona_A_Eliminar): void
+    {
+        /** @var Persona[] $personas */
+        $personas = self::$personaRepository->findBy([ 'apellidos' => $apellidosPersona_A_Eliminar ]);
+        $numPersonas = count($personas);
+
+        self::assertInstanceOf(Persona::class, $personas[0]);
+
+        // elimina la instancia
+        self::$personaRepository->remove($personas[0], true);
+
+        // verifica eliminación
+        $personas = self::$personaRepository->findBy([ 'apellidos' => $apellidosPersona_A_Eliminar ]);
+        self::assertCount(
+            $numPersonas - 1,
+            $personas
+        );
+    }
 }
