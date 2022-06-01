@@ -4,6 +4,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          backupGlobals="false"
+         cacheResultFile="var/.phpunit.cache/test-results"
          colors="true"
          bootstrap="tests/bootstrap.php"
          convertDeprecationsToExceptions="false"
@@ -18,21 +19,32 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="UPM Pruebas 2022">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
+    <coverage cacheDirectory="var/.phpunit.cache/code-coverage" processUncoveredFiles="true">
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <file>src/Kernel.php</file>
+        </exclude>
+        <report>
+            <html outputDirectory="var/coverage/" />
+            <!-- text outputFile="var/coverage/coverage.txt" / !-->
+            <xml outputDirectory="var/coverage/" />
+        </report>
     </coverage>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
 
+    <logging>
+        <junit outputFile="var/coverage/index.junit.xml"/>
+    </logging>
     <!-- Run `composer require symfony/panther` before enabling this extension -->
     <!--
     <extensions>
