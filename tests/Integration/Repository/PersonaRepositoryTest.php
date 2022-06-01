@@ -51,6 +51,34 @@ class PersonaRepositoryTest extends BaseTestCase
     }
 
     /**
+     * Verifica que sólo devuelve una persona aunque haya más de un resultado
+     */
+    public function testFindOneByApellidos_Con_Duplicados(): void
+    {
+        // duplica Persona1
+        self::$personaRepository->add(
+            new Persona(
+                self::PERSONA1['nombre'],
+                self::PERSONA1['apellidos'],
+                self::PERSONA1['email']
+            ),
+            true
+        );
+        $persona = self::$personaRepository
+            ->findOneByApellidos(self::PERSONA1['apellidos']);
+
+        self::assertNotNull($persona);
+        self::assertSame(
+            self::PERSONA1['apellidos'],
+            $persona->getApellidos()
+        );
+        self::assertCount(
+            2,
+            self::$personaRepository->findBy(['apellidos' => self::PERSONA1['apellidos']])
+        );
+    }
+
+    /**
      * Comprueba que se devuelve null cuando no existe el apellido
      */
     public function testFindOneByApellidos_Not_Found(): void

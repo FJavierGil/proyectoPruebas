@@ -44,12 +44,7 @@ class PersonaRepository extends ServiceEntityRepository
      */
     public function findOneByApellidos($value): Persona|null
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.apellidos LIKE :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-            ;
+        return $this->findOneBy([ 'apellidos' => $value ]);
     }
 
 //    public function findOneBySomeField($value): ?Persona
