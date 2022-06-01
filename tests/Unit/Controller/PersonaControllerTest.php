@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller;
+namespace App\Tests\Unit\Controller;
 
 use App\Controller\PersonaController;
 use App\Entity\Persona;
