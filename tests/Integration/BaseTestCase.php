@@ -4,6 +4,8 @@ namespace App\Tests\Integration;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
+use Faker\Factory as FakerFactoryAlias;
+use Faker\Generator as FakerGeneratorAlias;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Throwable;
 
@@ -13,6 +15,7 @@ use Throwable;
 class BaseTestCase extends WebTestCase
 {
     protected static EntityManagerInterface $entityManager;
+    protected static FakerGeneratorAlias $faker;
 
     /**
      * This method is called before the first test of this test class is run.
@@ -21,6 +24,9 @@ class BaseTestCase extends WebTestCase
      */
     public static function setUpBeforeClass(): void
     {
+        parent::setUpBeforeClass();
+        self::$faker = FakerFactoryAlias::create('es_ES');
+
         try { // Regenera las tablas con todas las entidades mapeadas
             self::$entityManager = self::bootKernel()
                 ->getContainer()

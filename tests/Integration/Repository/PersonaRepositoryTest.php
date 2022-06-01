@@ -9,15 +9,16 @@ use App\Tests\Integration\BaseTestCase;
 class PersonaRepositoryTest extends BaseTestCase
 {
     private static PersonaRepository $personaRepository;
-    protected const PERSONA1 = [
-        'nombre' => 'testNombrePersona1',
-        'apellidos' => 'testApellidosPersona1',
-        'email' => 'testEmailPersona1@example.com',
-    ];
+    protected static array $PERSONA1 = [ ];
 
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
+        self::$PERSONA1 = [
+            'nombre' => self::$faker->firstName(),
+            'apellidos' => self::$faker->lastName(),
+            'email' => self::$faker->email(),
+        ];
 
         // Obtiene el repositorio de personas
         self::$personaRepository = self::$entityManager
@@ -26,9 +27,9 @@ class PersonaRepositoryTest extends BaseTestCase
         // añade la Persona1
         self::$personaRepository->add(
             new Persona(
-                self::PERSONA1['nombre'],
-                self::PERSONA1['apellidos'],
-                self::PERSONA1['email']
+                self::$PERSONA1['nombre'],
+                self::$PERSONA1['apellidos'],
+                self::$PERSONA1['email']
             ),
             true
         );
@@ -41,11 +42,11 @@ class PersonaRepositoryTest extends BaseTestCase
     {
         // OJO: y si hay apellidos repetidos???
         $persona = self::$personaRepository
-            ->findOneByApellidos(self::PERSONA1['apellidos']);
+            ->findOneByApellidos(self::$PERSONA1['apellidos']);
 
         self::assertNotNull($persona);
         self::assertSame(
-            self::PERSONA1['apellidos'],
+            self::$PERSONA1['apellidos'],
             $persona->getApellidos()
         );
     }
@@ -58,23 +59,23 @@ class PersonaRepositoryTest extends BaseTestCase
         // duplica Persona1
         self::$personaRepository->add(
             new Persona(
-                self::PERSONA1['nombre'],
-                self::PERSONA1['apellidos'],
-                self::PERSONA1['email']
+                self::$PERSONA1['nombre'],
+                self::$PERSONA1['apellidos'],
+                self::$PERSONA1['email']
             ),
             true
         );
         $persona = self::$personaRepository
-            ->findOneByApellidos(self::PERSONA1['apellidos']);
+            ->findOneByApellidos(self::$PERSONA1['apellidos']);
 
         self::assertNotNull($persona);
         self::assertSame(
-            self::PERSONA1['apellidos'],
+            self::$PERSONA1['apellidos'],
             $persona->getApellidos()
         );
         self::assertCount(
             2,
-            self::$personaRepository->findBy(['apellidos' => self::PERSONA1['apellidos']])
+            self::$personaRepository->findBy(['apellidos' => self::$PERSONA1['apellidos']])
         );
     }
 
@@ -83,7 +84,7 @@ class PersonaRepositoryTest extends BaseTestCase
      */
     public function testFindOneByApellidos_Not_Found(): void
     {
-        $apellidosMod = 'X-X' . self::PERSONA1['apellidos'];
+        $apellidosMod = 'X-X' . self::$PERSONA1['apellidos'];
         $persona = self::$personaRepository
             ->findOneByApellidos($apellidosMod);
 
