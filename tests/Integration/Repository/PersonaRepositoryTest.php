@@ -94,4 +94,29 @@ class PersonaRepositoryTest extends BaseTestCase
             $persona?->getApellidos()
         );
     }
+
+    /**
+     * Prueba el método add($persona)
+     *
+     * @return string apellidos usuario añadido
+     */
+    public function testAdd(): string
+    {
+        $persona = new Persona(
+            self::$faker->firstName(),
+            self::$faker->lastName(),
+            self::$faker->email(),
+        );
+
+        self::$personaRepository->add($persona, true);
+
+        self::assertGreaterThanOrEqual(
+            1,
+            count(self::$personaRepository->findBy([
+                'email' => $persona->getEmail()
+            ]))
+        );
+
+        return $persona->getApellidos();
+    }
 }
