@@ -13,7 +13,7 @@ class Persona implements JsonSerializable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id;
+    private ?int $id = 0;
 
     #[ORM\Column(type: 'string', length: 128)]
     private string $nombre;
@@ -23,6 +23,13 @@ class Persona implements JsonSerializable
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $email;
+
+    public function __construct(string $nombre = '', string $apellidos = '', string $email = '')
+    {
+        $this->nombre = $nombre;
+        $this->apellidos = $apellidos;
+        $this->email = $email;
+    }
 
     public function getId(): ?int
     {
