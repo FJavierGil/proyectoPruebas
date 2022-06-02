@@ -23,7 +23,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "infection/extension-installer": true
         },
         "optimize-autoloader": true,
         "preferred-install": {
@@ -56,7 +57,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "infection": "vendor/bin/infection --ansi --coverage=\"var/coverage\" --threads=20 --only-covered",
+        "metrics": "vendor/bin/phpmetrics --junit=\"var/coverage/index.junit.xml\" --report-html=\"var/PhpMetrics_report\" ./src"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -70,10 +73,16 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.19",
+        "infection/infection": "^0.26",
+        "phpmetrics/phpmetrics": "^2.8",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "5.4.*",
         "symfony/css-selector": "5.4.*",
         "symfony/maker-bundle": "^1.43",
         "symfony/phpunit-bridge": "^6.1"
+    },
+    "scripts-descriptions": {
+        "infection": "Runs the mutation testing.",
+        "metrics": "PhpMetrics provides metrics about PHP project and classes."
     }
 }
